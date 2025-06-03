@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['aluno_id'])) {
-    header("Location: login.php");
+    header("Location: login.php"); 
     exit();
 }
 
@@ -10,141 +10,102 @@ require_once '../../includes/db.php';
 
 $aluno_id = $_SESSION['aluno_id'];
 
-// Buscar o nome do aluno
+
 $stmt_aluno = $pdo->prepare("SELECT nome FROM alunos WHERE id = ?");
 $stmt_aluno->execute([$aluno_id]);
 $aluno = $stmt_aluno->fetch(PDO::FETCH_ASSOC);
-$nome_aluno = $aluno ? htmlspecialchars($aluno['nome']) : 'Aluno';
 
-// Buscar treinos salvos
-$stmt = $pdo->prepare("SELECT * FROM treinos WHERE aluno_id = ? ORDER BY id DESC");
-$stmt->execute([$aluno_id]);
-$treinos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$nome_aluno_formatado = $aluno ? htmlspecialchars(explode(' ', trim($aluno['nome']))[0]) : 'Aluno';
 
-// Mensagem de sucesso
+
+$stmt_treinos_salvos = $pdo->prepare("SELECT * FROM treinos WHERE aluno_id = ? ORDER BY id DESC");
+$stmt_treinos_salvos->execute([$aluno_id]);
+$treinos_salvos = $stmt_treinos_salvos->fetchAll(PDO::FETCH_ASSOC);
+
+
 $mensagem_sucesso = '';
 if (!empty($_SESSION['mensagem_sucesso'])) {
     $mensagem_sucesso = $_SESSION['mensagem_sucesso'];
     unset($_SESSION['mensagem_sucesso']);
+} elseif (isset($_GET['msg']) && $_GET['msg'] === 'sucesso') {
+    $mensagem_sucesso = "Treino salvo com sucesso!";
+} elseif (isset($_GET['s']) && $_GET['s'] === 'ok') { 
+    $mensagem_sucesso = "Treino salvo com sucesso!";
 }
-
-// OBS: $_POST['tipo'] só estará disponível se form foi postado nesta página
-// Como o form é enviado para outro controller, removemos esta verificação do PHP
 ?>
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Treinos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        .container {
-            max-width: 900px;
-            margin: auto;
-        }
-        .header, .footer {
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #cc0000;
-        }
-        select, button {
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        select {
-            width: 100%;
-            max-width: 300px;
-        }
-        button {
-            background-color: #cc0000;
-            color: white;
-            border: none;
-        }
-        button:hover {
-            background-color: #990000;
-        }
-        .success-message {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .exercises {
-            margin-top: 20px;
-        }
-        .exercise {
-            background-color: #f9f9f9;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-        }
-        .exercise h3 {
-            margin-top: 0;
-            color: #333;
-        }
-        .exercise ul {
-            padding-left: 20px;
-        }
-    </style>
+    <title>Painel de Treinos - FMU FIT</title>
+    <link rel="stylesheet" href="../../assets/css/styles-seletor.css">
 </head>
 <body>
-<div class="container">
-    <header class="header">FMU FIT</header>
 
-    <h2>Bem-vindo(a), <?= $nome_aluno ?>!</h2>
-    <h2>Meus Treinos</h2>
+    <header>
+      <div class="header-content">
+        <div class="textos-header">
+          <h1>Painel de Treinos</h1>
+          <p>Escolha seu objetivo, visualize e salve seu treino personalizado!</p>
+        </div>
+        <img src="../../assets/images/FMUFIT.png" alt="Logo FMU FIT" class="header-img"> </div>
+    </header>
 
-    <?php if (!empty($mensagem_sucesso)): ?>
-        <div class="success-message"><?= htmlspecialchars($mensagem_sucesso) ?></div>
-    <?php endif; ?>
+    <div class="page-container"> <?php if (!empty($mensagem_sucesso)): ?>
+            <div class="success-message"><?= htmlspecialchars($mensagem_sucesso) ?></div>
+        <?php endif; ?>
 
-    <h3>SELECIONE SEU TREINO</h3>
+        <div class="selector">
+            <p style="font-size: 1.5em; color: #333; margin-bottom:10px; text-align: center;"> <strong><?= $nome_aluno_formatado ?></strong>!
+            </p>
+            <label for="tipoTreino" class="frase-vermelha" style="display: block; text-align: center; margin-bottom: 10px;">
+              Qual seu objetivo hoje? Escolha abaixo para ver os detalhes do treino!
+            </label>
 
-    <form method="post" action="../../controllers/AlunoController.php" id="formTreino">
-        <input type="hidden" name="acao" value="salvar_treino">
-        <input type="hidden" name="descricao" id="descricaoTreino">
-        <input type="hidden" name="titulo" id="tituloTreino">
+            <form method="post" action="../../controllers/AlunoController.php" id="formTreino">
+                <input type="hidden" name="acao" value="salvar_treino">
+                <input type="hidden" name="descricao" id="descricaoTreino">
+                <input type="hidden" name="titulo" id="tituloTreino">
 
-        <label for="tipoTreino">Tipo:</label>
-        <select name="tipo" id="tipoTreino" required onchange="mostrarExercicios()">
-            <option value="">-- Selecione --</option>
-            <option value="condicionamento">Condicionamento</option>
-            <option value="emagrecimento">Emagrecimento</option>
-            <option value="hipertrofia">Hipertrofia</option>
-        </select>
+                <select name="tipo" id="tipoTreino" required onchange="mostrarExercicios()">
+                    <option value="">-- Selecione seu Objetivo --</option>
+                    <option value="condicionamento">Condicionamento</option>
+                    <option value="emagrecimento">Emagrecimento</option>
+                    <option value="hipertrofia">Hipertrofia</option>
+                </select>
+                
+                <div id="exerciciosContainer" class="exercises" style="margin-top: 20px;"></div>
+                
+                <button type="submit" id="btnSalvar" disabled>Salvar Treino Visualizado</button>
+            </form>
+        </div>
 
-        <div id="exerciciosContainer"></div>
-        <button type="submit" id="btnSalvar" disabled>Salvar Treino</button>
-    </form>
+        <div class="gif-container">
+            <img src="../../assets/images/fitness_animation_red_strong.gif" alt="GIF animado de treino" style="width:180px;"> </div>
 
-    <hr/>
+        <hr style="margin: 40px 0;"/>
 
-    <?php if (!empty($treinos)): ?>
-        <h3>Treinos Salvos</h3>
-        <?php foreach ($treinos as $treino): ?>
-            <div class="exercises">
-                <h3>Treino: <?= htmlspecialchars($treino['titulo']) ?></h3>
-                <pre style="white-space: pre-wrap;"><?= htmlspecialchars($treino['descricao']) ?></pre>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Você ainda não possui treinos salvos.</p>
-    <?php endif; ?>
+        <?php if (!empty($treinos_salvos)): ?>
+            <section class="saved-workouts-container">
+                <h3>Seus Treinos Salvos</h3>
+                <?php foreach ($treinos_salvos as $treino): ?>
+                    <div class="saved-workout-item">
+                        <h4>Treino de <?= htmlspecialchars(ucfirst($treino['titulo'])) ?></h4>
+                        <pre><?= htmlspecialchars($treino['descricao']) ?></pre>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+        <?php else: ?>
+            <p style="text-align:center; margin-top:20px;">Você ainda não possui treinos salvos.</p>
+        <?php endif; ?>
 
-    <a href="area_aluno.php">Voltar</a>
+        <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+            <a href="area_aluno.php" style="text-decoration:none; background-color: #555; color:white; padding: 12px 25px; border-radius:8px; font-size:16px;">Voltar para Área do Aluno</a>
+        </div>
 
-    <footer class="footer">© 2025 Academia</footer>
-</div>
+    </div> <footer>
+      <p>&copy; <?= date('Y') ?> FMU FIT - Todos os direitos reservados.</p>
+    </footer>
 
 <script>
 const treinosPredefinidos = {
@@ -172,39 +133,42 @@ function mostrarExercicios() {
     const tituloInput = document.getElementById('tituloTreino');
     const btnSalvar = document.getElementById('btnSalvar');
 
-    container.innerHTML = '';
+    container.innerHTML = ''; 
     descricaoInput.value = '';
     tituloInput.value = '';
-    btnSalvar.disabled = true;
+    btnSalvar.disabled = true; 
+    
 
-    if (treinosPredefinidos[tipo]) {
-        let html = '<div class="exercises">';
-        let descricao = `Treino: ${tipo.toUpperCase()}\n\n`;
-        let titulo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+
+    if (tipo && treinosPredefinidos[tipo]) {
+        let htmlGerado = ''; 
+        let descricaoTextoCompleto = ''; 
+        
+        tituloInput.value = tipo; 
 
         treinosPredefinidos[tipo].forEach(dia => {
-            html += `<div class="exercise"><h3>${dia.dia}</h3><ul>`;
-            descricao += `${dia.dia}:\n`;
+            htmlGerado += `<div class="exercise"><h3>${dia.dia}</h3><ul>`; 
+            descricaoTextoCompleto += `${dia.dia}:\n`;
             dia.exercicios.forEach(ex => {
-                html += `<li>${ex}</li>`;
-                descricao += `- ${ex}\n`;
+                htmlGerado += `<li>${ex}</li>`;
+                descricaoTextoCompleto += `- ${ex}\n`;
             });
-            html += '</ul></div>\n';
-            descricao += '\n';
+            htmlGerado += '</ul></div>';
+            descricaoTextoCompleto += '\n';
         });
-
-        html += '</div>';
-        container.innerHTML = html;
-        descricaoInput.value = descricao.trim();
-        tituloInput.value = titulo;
-        btnSalvar.disabled = false;
+        
+        container.innerHTML = htmlGerado; 
+        descricaoInput.value = descricaoTextoCompleto.trim();
+        btnSalvar.disabled = false; 
+    
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tipo = document.getElementById('tipoTreino').value;
-    if (tipo) mostrarExercicios();
+    const btnSalvar = document.getElementById('btnSalvar');
+    if(btnSalvar) btnSalvar.disabled = true; 
 });
 </script>
+
 </body>
 </html>

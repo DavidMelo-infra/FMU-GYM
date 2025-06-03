@@ -1,0 +1,387 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+color: #333;
+}
+
+header {
+background-color: #d3220e;
+color: #fff;
+padding: 20px;
+}
+
+.header-content {
+display: flex;
+align-items: center;
+justify-content: space-between;
+flex-wrap: wrap;
+}
+
+.textos-header {
+flex: 2;
+}
+
+.header-img {
+width: 250px;
+height: auto;
+border-radius: 8px;
+margin-left: 20px;
+}
+
+main {
+padding: 30px 20px;
+display: flex;
+justify-content: center;
+}
+
+.form-container {
+background-color: #fff;
+padding: 30px;
+border-radius: 12px;
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+max-width: 500px;
+width: 100%;
+}
+
+form {
+display: flex;
+flex-direction: column;
+}
+
+form label {
+font-weight: bold;
+margin: 12px 0 5px;
+}
+
+form input,
+form select {
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 6px;
+font-size: 1em;
+}
+
+form button {
+background-color: #dd5546;
+color: white;
+border: none;
+padding: 12px;
+margin-top: 20px;
+font-size: 1em;
+border-radius: 8px;
+cursor: pointer;
+transition: background 0.3s;
+}
+
+form button:hover {
+background-color: #a93226;
+}
+
+footer {
+position: static;
+bottom: 0;
+left: 0;
+right: 0;
+background-color: #d72020;
+color: white;
+text-align: center;
+padding: 2px 4px;
+font-size: 14px;
+z-index: 1000;
+box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+color: #333;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+}
+
+.header {
+background-color: #c0392b;
+padding: 20px;
+color: #fff;
+text-align: center;
+}
+
+.header-content {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 15px;
+}
+
+.logo {
+height: 80px;
+}
+
+main {
+flex: 1;
+padding: 40px 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.planos-container {
+display: flex;
+flex-wrap: wrap;
+gap: 30px;
+justify-content: center;
+margin-bottom: 50px;
+}
+
+
+.plano {
+background-color: #fff;
+padding: 25px;
+border-radius: 12px;
+width: 220px;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+text-align: center;
+cursor: pointer;
+border: 2px solid transparent;
+transition: all 0.3s ease;
+position: relative;
+}
+
+
+.plano input[type="radio"] {
+position: absolute;
+opacity: 0;
+pointer-events: none;
+}
+
+
+.plano:has(input[type="radio"]:checked) {
+border: 2px solid #c0392b;
+box-shadow: 0 0 12px rgba(192, 57, 43, 0.5);
+}
+
+.plano:has(input[type="radio"]:checked) h2,
+.plano:has(input[type="radio"]:checked) p {
+color: #c0392b;
+font-weight: bold;
+}
+
+/* Botão de confirmação */
+.confirmar {
+text-align: center;
+}
+
+.confirmar button {
+background-color: #c0392b;
+color: white;
+border: none;
+padding: 12px 30px;
+font-size: 1.1em;
+border-radius: 10px;
+cursor: pointer;
+transition: background-color 0.3s;
+}
+
+.confirmar button:hover {
+background-color: #e62211;
+}
+
+.footer {
+background-color: #c0392b;
+color: white;
+text-align: center;
+padding: 15px;
+font-size: 0.9em;
+}
+.pagamento-container {
+text-align: center;
+margin-bottom: 40px;
+}
+
+.pagamento-container h2 {
+margin-bottom: 20px;
+font-size: 1.6em;
+color: #c0392b;
+}
+
+.pagamento-opcao {
+display: inline-block;
+background-color: #fff;
+padding: 15px 25px;
+margin: 10px;
+border-radius: 10px;
+border: 2px solid transparent;
+cursor: pointer;
+transition: all 0.3s ease;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+font-size: 1.1em;
+position: relative;
+}
+
+/* Ocultar visual do input */
+.pagamento-opcao input[type="radio"] {
+position: absolute;
+opacity: 0;
+pointer-events: none;
+}
+
+/* Estilo ao selecionar */
+.pagamento-opcao:has(input[type="radio"]:checked) {
+border: 2px solid #c0392b;
+box-shadow: 0 0 12px rgba(192, 57, 43, 0.4);
+background-color: #ffeaea;
+font-weight: bold;
+}
+
+/* Destaque ainda maior para PIX */
+.pagamento-opcao input[value="pix"]:checked ~ span {
+font-weight: bold;
+color: #c0392b;
+}
+
+input:invalid {
+border: 1px solid rgb(243, 185, 185);
+}
+
+input:invalid:focus {
+box-shadow: 0 0 5px rgb(245, 158, 158);
+}
+
+.imagem-final {
+text-align: center;
+margin: 0.1px 0;
+}
+
+.imagem-final img {
+max-width: 30%;
+height: auto;
+border-radius: 10px;
+}
+
+@keyframes pulseBox {
+0% {
+transform: scale(1);
+box-shadow: 0 0 0 0 rgba(209, 16, 16, 0.4);
+}
+70% {
+transform: scale(1.05);
+box-shadow: 0 0 0 10px rgba(0, 128, 255, 0);
+}
+100% {
+transform: scale(1);
+box-shadow: 0 0 0 0 rgba(0, 128, 255, 0);
+}
+}
+
+.pulse {
+animation: pulseBox 1.5s infinite;
+}
+
+#confirmar-experimental button {
+background-color: #b10c0c;
+color: white;
+border: none;
+padding: 14px 28px;
+font-size: 20px;
+border-radius: 10px;
+cursor: pointer;
+transition: background-color 0.3s ease, transform 0.2s ease;
+box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#confirmar-experimental button:hover {
+background-color: #fc1111;
+transform: scale(1.05);
+}
+
+#form-cartao label,
+#form-cartao input {
+display: block;
+width: 100%;
+max-width: 400px;
+margin: 10px auto;
+font-size: 16px;
+}
+
+#form-cartao input {
+padding: 10px;
+border-radius: 8px;
+border: 1px solid #ccc;
+}
+
+#mensagem-nome {
+font-size: 1.4em; /* ou 20px, se preferir */
+font-weight: bold;
+color: #b30000;
+margin-bottom: 20px;
+}
+/* Estilos para mensagens de feedback */
+.feedback-message {
+padding: 15px;
+margin-bottom: 20px;
+border-radius: 8px;
+text-align: center;
+font-weight: bold;
+}
+.feedback-message.sucesso {
+background-color: #d4edda;
+color: #155724;
+border: 1px solid #c3e6cb;
+}
+.feedback-message.erro {
+background-color: #f8d7da;
+color: #721c24;
+border: 1px solid #f5c6cb;
+}
+.form-actions { 
+text-align: center;
+margin-top: 20px;
+}
+.form-actions a {
+text-decoration: none;
+color: #d3220e;
+font-weight: bold;
+}
+.form-actions a:hover {
+text-decoration: underline;
+}
+.error-message {
+color: red;
+background-color: #ffe0e0;
+border: 1px solid red;
+padding: 10px;
+margin-bottom: 15px;
+border-radius: 6px;
+text-align: center;
+}
+.success-message {
+color: green;
+background-color: #e0ffe0;
+border: 1px solid green;
+padding: 10px;
+margin-bottom: 15px;
+border-radius: 6px;
+text-align: center;
+}
+.register-link {
+text-align: center;
+margin-top: 15px;
+}
+
+
